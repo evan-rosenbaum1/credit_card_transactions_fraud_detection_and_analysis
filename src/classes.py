@@ -31,7 +31,7 @@ class ModelEvaluator:
                 param_grid=self.param_grid,
                 cv=5,
                 scoring='average_precision',
-                verbose=2,
+                verbose=1,
                 n_jobs=-1
             )
             
@@ -70,5 +70,5 @@ class ModelEvaluator:
         return ColumnTransformer(
             transformers=[
                 ('num', StandardScaler(), numeric_features),
-                ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
+                ('cat', OneHotEncoder(handle_unknown='ignore', drop= 'first', sparse_output=False), categorical_features)
             ])
