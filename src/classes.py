@@ -1,5 +1,4 @@
 import warnings
-warnings.filterwarnings('ignore')
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 import pandas as pd
