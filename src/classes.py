@@ -1,5 +1,6 @@
 import warnings
 warnings.filterwarnings('ignore')
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 import pandas as pd
 from sklearn.model_selection import train_test_split, GridSearchCV
