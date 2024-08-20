@@ -22,6 +22,8 @@ ABC Bank is experiencing challenges in detecting credit card fraud due to the hi
 ## Streamlit App
 If you would like to iteract with the model, please click the streamlit button below.
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://creditcardtransactionsfrauddetectionandanalysis-dqsiqchh9v4s6g.streamlit.app)
+
 After answering a questionnaire, you can upload a csv of your credit card transactions. The transactions will be run through the fraud detection model and will be classified as either non-fraudulent or potentially fraudulent. 
 
 The required columns for the csv file are as follows:
@@ -45,8 +47,6 @@ For the category column, each transaction must be categorized as one of the foll
 - grocery_net
 - food_dining
 - entertainment
-
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://creditcardtransactionsfrauddetectionandanalysis-dqsiqchh9v4s6g.streamlit.app)
 
 ## Data Summary
 
