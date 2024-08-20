@@ -26,7 +26,7 @@ class ModelEvaluator:
         self.boosting_results_df = None
 
     def get_preprocessor(self, X):
-        numeric_features = X.select_dtypes(include=['float64', 'int64']).columns
+        numeric_features = X.select_dtypes(include=['float64', 'int64', 'int32']).columns
         categorical_features = X.select_dtypes(include=['object']).columns
 
         return ColumnTransformer(
