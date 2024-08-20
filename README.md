@@ -2,6 +2,7 @@
 
 ## Table of Contents
 - [Project Overview](#project-overview)
+- [Streamlit App](#streamlit-app)
 - [Data Summary](#data-summary)
 - [Project Summary](#project-summary)
   - [Resampling Techniques](#resampling-techniques)
@@ -17,6 +18,35 @@
 ## Project Overview
 
 ABC Bank is experiencing challenges in detecting credit card fraud due to the high volume of transactions processed daily. The existing fraud detection system struggles to identify fraudulent activities, leading to significant financial losses and customer dissatisfaction. The goal of this project is to develop a machine learning model that effectively detects fraudulent transactions, thereby minimizing financial losses, improving customer trust, and enhancing operational efficiency.
+
+## Streamlit App
+If you would like to iteract with the model, please click the streamlit button below.
+
+After answering a questionnaire, you can upload a csv of your credit card transactions. The transactions will be run through the fraud detection model and will be classified as either non-fraudulent or potentially fraudulent. 
+
+The required columns for the csv file are as follows:
+
+- transaction_date
+- category
+- amt
+
+For the category column, each transaction must be categorized as one of the following:
+- home
+- health_fitness
+- misc_net
+- gas_transport
+- shopping_net
+- personal_care
+- misc_pos
+- kids_pets
+- grocery_pos
+- shopping_pos
+- travel
+- grocery_net
+- food_dining
+- entertainment
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://creditcardtransactionsfrauddetectionandanalysis-dqsiqchh9v4s6g.streamlit.app)
 
 ## Data Summary
 
