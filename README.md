@@ -13,6 +13,7 @@
     - [Boosted Models (Hypertuned)](#boosted-models-based-on-randomforestclassifier-oversample)
 - [Model Score](#model-score)
 - [Business Impact](#business-impact)
+- [Market Segementation](#market-segementation)
 - [Contact](#contact)
 
 ## Project Overview
@@ -159,6 +160,10 @@ The PR-AUC evaluation metric highlights the model's:
 - **Customer Experience**: With high precision and recall, customers are less likely to be inconvenienced by false alarms, and genuine fraud attempts are more likely to be caught early, protecting customers from potential financial harm.
 - **Operational Efficiency**: Fewer false positives mean that fewer resources need to be spent on investigating transactions that aren’t fraudulent. This allows fraud analysts to focus on the transactions that are most likely to be fraudulent.
 - **Risk Management**: High recall ensures that the model captures the majority of fraudulent transactions, which is crucial for minimizing financial losses and maintaining trust with customers.
+
+## Market Segmentation
+
+To enhance the effectiveness of fraud detection, market segmentation was employed to identify and target specific customer groups. By segmenting the customer base into distinct clusters using KMeans, Birch, and DBSCAN algorithms, we could better understand different customer behaviors and transaction patterns. KMeans provided the most representative clusters, which were analyzed to identify high-risk segments more accurately. This segmentation helps tailor the fraud detection model to better address the unique characteristics of different customer groups, improving overall detection accuracy and reducing false positives.
 
 ## Contact
 
