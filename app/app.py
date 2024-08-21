@@ -45,7 +45,8 @@ def preprocess_data(df, user_data):
 
 # Questionnaire Page
 def questionnaire():
-    st.title("Questionnaire")
+    st.title("Credit Card Fraud Detection")
+    st.subheader("Questionnaire")
 
     us_state_abbreviations = [
         'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 
@@ -80,13 +81,79 @@ def questionnaire():
 
 # CSV Upload Page
 def csv_upload(model):
-    st.title("Upload CSV")
+    st.title("Credit Card Fraud Detection")
+    st.subheader("Upload CSV or Use Tester CSV")
     
-    uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
+    # Radio button to choose between uploading a file or using a tester CSV
+    csv_option = st.radio("Choose an option", ("Upload your CSV file", "Use Tester CSV from GitHub"))
     
-    if uploaded_file is not None:
-        st.write("CSV file uploaded. Processing...")
-        data_df = pd.read_csv(uploaded_file)
+    # Markdown based on the selected option
+    if csv_option == "Upload your CSV file":
+        st.markdown("""
+                    The required columns for the CSV file are as follows:
+
+                    - `transaction_date`
+                    - `category`
+                    - `amt`
+
+                    For the category column, each transaction must be categorized as one of the following:
+
+                    - `home`
+                    - `health_fitness`
+                    - `misc_net`
+                    - `gas_transport`
+                    - `shopping_net`
+                    - `personal_care`
+                    - `misc_pos`
+                    - `kids_pets`
+                    - `grocery_pos`
+                    - `shopping_pos`
+                    - `travel`
+                    - `grocery_net`
+                    - `food_dining`
+                    - `entertainment`
+                    """
+                    )
+    
+    if csv_option == "Upload your CSV file":
+        uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
+        
+        if uploaded_file is not None:
+            st.write("CSV file uploaded. Processing...")
+            data_df = pd.read_csv(uploaded_file)
+
+            # Process data with user inputs and model preprocessor
+            processed_data, original_df = preprocess_data(data_df, st.session_state['user_data'])
+            
+            # Make predictions
+            predictions = model.predict(processed_data)
+
+            # Map predictions to labels
+            prediction_labels = ['non-fraudulent' if p == 0 else 'potential_fraud' for p in predictions]
+
+            # Add predictions to the original DataFrame
+            original_df['predictions'] = prediction_labels
+
+            # Save the updated DataFrame to a new CSV file
+            csv_file_path = 'updated_predictions.csv'
+            original_df.to_csv(csv_file_path, index=False)
+            
+            # Store both DataFrames and file path in session state
+            st.session_state['csv_file_path'] = csv_file_path
+            st.session_state['original_df'] = original_df
+            st.write("CSV file processed and predictions added.")
+            
+            # Button to navigate to results page
+            if st.button('Go to Results'):
+                st.session_state['page'] = 'results'
+    
+    elif csv_option == "Use Tester CSV from GitHub":
+        github_url = "https://raw.githubusercontent.com/evan-rosenbaum1/credit_card_transactions_fraud_detection_and_analysis/main/app/cc_fraud_test.csv"
+        
+        st.write("Fetching tester CSV from GitHub...")
+        
+        # Read the tester CSV file
+        data_df = pd.read_csv(github_url)
 
         # Process data with user inputs and model preprocessor
         processed_data, original_df = preprocess_data(data_df, st.session_state['user_data'])
@@ -107,15 +174,15 @@ def csv_upload(model):
         # Store both DataFrames and file path in session state
         st.session_state['csv_file_path'] = csv_file_path
         st.session_state['original_df'] = original_df
-        st.write("CSV file processed and predictions added.")
+        st.write("Tester CSV processed and predictions added.")
         
         # Button to navigate to results page
         if st.button('Go to Results'):
             st.session_state['page'] = 'results'
 
-# Results Page
 def results():
-    st.title("Results")
+    st.title("Credit Card Fraud Detection")
+    st.subheader("Results")
     
     st.write("Here is your file with predictions:")
     
@@ -124,35 +191,52 @@ def results():
     
     if csv_file_path and os.path.exists(csv_file_path):
         st.write("Preview of the updated data:")
-        st.dataframe(original_df)  # Display the updated DataFrame
+        st.dataframe(original_df)
 
-        # Provide download button
         with open(csv_file_path, 'rb') as file:
             st.download_button(
                 label="Download CSV with Predictions",
                 data=file,
                 file_name=csv_file_path,
-                mime="text/csv"
+                mime="text/csv",
+                on_click=delete_user_data
             )
+        
+        if st.button('Delete My Information'):
+            delete_user_data()
+            st.query_params.clear()  # Resets the app
+
     else:
         st.write("No file to display or file path is incorrect.")
 
-# Main function
+def delete_user_data():
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+    
+    st.session_state['page'] = 'deletion_confirmation'
+
+def deletion_confirmation():
+    st.title("Your information has been deleted")
+    st.write("Thank you for using our service. Your data has been securely deleted.")
+    if st.button("Start Over"):
+        st.session_state['page'] = 'questionnaire'
+        st.query_params.clear()  # Resets the app
+
 def main():
     if 'page' not in st.session_state:
         st.session_state['page'] = 'questionnaire'
     
-    # Load model
     model_path = os.path.join(os.path.dirname(__file__), '..', 'model', 'feat_min_rf_model.pkl')
     model = load_model(model_path)
 
-    # Display the correct page based on the state
     if st.session_state['page'] == 'questionnaire':
         questionnaire()
     elif st.session_state['page'] == 'upload':
         csv_upload(model)
     elif st.session_state['page'] == 'results':
         results()
+    elif st.session_state['page'] == 'deletion_confirmation':
+        deletion_confirmation()
     else:
         st.write("Page not found.")
 
